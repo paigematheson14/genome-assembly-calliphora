@@ -89,7 +89,9 @@ I used the DORADO demux tool (https://github.com/nanoporetech/dorado), running P
 module purge
 module load Dorado/0.5.0
 
-dorado demux --output-dir nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258 --no-classify nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/22258_sup_calls.bam
+cd nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258
+
+dorado demux --output-dir nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258 --no-classify 22258_sup_calls.bam
 
 ```
 
