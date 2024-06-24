@@ -5,7 +5,7 @@ This repository will detail the workflow I used to create reference genomes for 
 Creating a genome is a complex process that generates many different files. Thus, it is important to keep folders organised in a way that makes sense. Meeran has a great github page that is dedicated to this and I recommend structuring folders in this manner - https://github.com/meeranhussain/QuickTips
 
 # Sequenced data - PromethION data
-My promethion data arrived to me in BLOW5 format (which is funny because blow5 sounds awfully similar to blowfly...). There were two libraries (pool A and pool B) which contained data for four samples (each sample representing one of the four aforementioned species). There were 96 barcodes (in blow5 format) in each library, however, we only really care about the first four barcodes (as these represent our samples and contain the bulk of the data we need). I think that the remaining 92 barcodes just contain junk but I'm not 100% sure on that fact. 
+My promethion data arrived to me in BLOW5 format. There were two libraries (pool A and pool B) which contained data for four samples (each sample representing one of the four aforementioned species). There were 96 barcodes (in blow5 format) in each library, however, we only really care about the first four barcodes (as these represent our samples and contain the bulk of the data we need). I think that the remaining 92 barcodes just contain junk but I'm not 100% sure on that fact. 
 
 - NB01	GR-AC-CQ-50 (i.e., calliphora quadrimaculata) 
 - NB02	GR-AC-CH-259 (i.e., calliphora hilli)
