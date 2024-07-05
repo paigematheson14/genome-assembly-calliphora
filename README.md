@@ -42,7 +42,7 @@ For Pool B.
 
 NOTE: you will need the kit name and experiment ID to match what is in your data. If you didn't recieve this information from your sequencer (like I), it is possible to retrieve this information from the POD5 files using the POD5 tool (https://github.com/nanoporetech/pod5-file-format). 
 
-The CSV file needs to be in the same folder as the POD5 files. If you have two libraries to basecall, then you need to have two folders and run each library seperately. Here is the slurm script for basecalling: 
+The CSV file needs to be in the same folder as the POD5 files. If you have two libraries to basecall, then you need to have two folders and run each library seperately. Here is the slurm script for basecalling (BTW you only need the '#SBATCH --gpus-per-node=A100:1' line for the basecalling part, so can remove from subsequent slurms):
 
 ```
 #!/bin/bash -e
@@ -70,33 +70,36 @@ You need to run this twice for each library (if you have two pools), changing th
 
 # 3. Demultiplexing 
 
-I used the DORADO demux tool (https://github.com/nanoporetech/dorado), running Pool A and Pool B seperately. Need to create another two slurm scripts to run (one for each library; if you only have one library then you do not need to make two). BTW you only need the '#SBATCH --gpus-per-node=A100:1' line for the basecalling part, so can remove from subsequent slurms :) 
+I used the DORADO demux tool (https://github.com/nanoporetech/dorado), running Pool A and Pool B seperately. I tried to run this a couple of times using a slurm script but it failed twice so I just ran it directly on Nesi and it worked fine - took about two hours per library. The output is four BAM files (i.e. one BAM file per sample). 
 
 ```
-#!/bin/bash -e
-
-#SBATCH --account=uow03920
-#SBATCH --job-name=dorado
-#SBATCH --mem=40G
-#SBATCH --cpus-per-task=8
-#SBATCH --ntasks-per-node=8
-#SBATCH --time=124:00:00
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=paige.matheson14@gmail.com
-#SBATCH --output demux_%j.out    # save the output into a file
-#SBATCH --error demux_%j.err     # save the error output into a file
-
 module purge
 module load Dorado/0.5.0
 
-cd nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258
 
 dorado demux --output-dir nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258 --no-classify 22258_sup_calls.bam
 
 ```
 
+# 4. Convert the BAM files into FASTQ files
 
+Can probably run this directly through NESI without needing to create a slurm script. You need to download samtools - I downloaded from here (http://sourceforge.net/projects/samtools/files/samtools/) and followed these instructions (http://www.sthda.com/english/wiki/install-samtools-on-unix-system).
 
+```
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258/DEMUX_22258/
+
+samtools fastq SQK-MLK111-96-XL_barcode01.bam > sample1.fastq
+samtools fastq SQK-MLK111-96-XL_barcode02.bam > sample2.fastq
+samtools fastq SQK-MLK111-96-XL_barcode03.bam > sample3.fastq
+samtools fastq SQK-MLK111-96-XL_barcode04.bam > sample4.fastq
+
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/02_demux_22276/DEMUX_22276/
+
+samtools fastq SQK-MLK111-96-XL_barcode01.bam > sample1a.fastq
+samtools fastq SQK-MLK111-96-XL_barcode02.bam > sample2a.fastq
+samtools fastq SQK-MLK111-96-XL_barcode03.bam > sample3a.fastq
+samtools fastq SQK-MLK111-96-XL_barcode04.bam > sample4a.fastq
 
 
 
