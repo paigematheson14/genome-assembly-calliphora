@@ -101,6 +101,15 @@ samtools fastq SQK-MLK111-96-XL_barcode02.bam > sample2a.fastq
 samtools fastq SQK-MLK111-96-XL_barcode03.bam > sample3a.fastq
 samtools fastq SQK-MLK111-96-XL_barcode04.bam > sample4a.fastq
 
+# 5. Concatenate the pool A and pool B samples together
+
+```
+cat sample1.fastq  sample1a.fastq > sample1_cat.fastq
+cat sample2.fastq  sample2a.fastq > sample2_cat.fastq
+cat sample3.fastq  sample3a.fastq > sample3_cat.fastq
+cat sample4.fastq  sample4a.fastq > sample4_cat.fastq
+
+```
 
 
 
