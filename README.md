@@ -104,6 +104,8 @@ samtools fastq SQK-MLK111-96-XL_barcode04.bam > sample4a.fastq
 
 # 5. Concatenate the pool A and pool B samples together
 
+Merge the poolA and poolB files together so that there is only one file to work with hereafter
+
 ```
 cat sample1.fastq  sample1a.fastq > sample1_cat.fastq
 cat sample2.fastq  sample2a.fastq > sample2_cat.fastq
