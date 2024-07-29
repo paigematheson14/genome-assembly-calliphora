@@ -116,11 +116,9 @@ cat sample4.fastq  sample4a.fastq > MO_04_cat.fastq
 
 # 6. QC of fastQ files using Nanoplot and BBmap
 
-NanoPlot performs quality checks on the FASTQ files
+NanoPlot performs quality checks on the FASTQ files.
 
-I turned the following nanoplot code into an excutable .sh file (i.e., in text edit, then ran the code `chmod +x nanoplot.sh`, put the file into the same directory as my fastq files, then ran ` ./nanoplot.sh`
-
-This is the code for the actual QC using nanoplot
+This is the code for the QC using nanoplot
 
 ```
 for i in 01 02 03 04; do
@@ -129,6 +127,7 @@ done
 
 ```
 
+I made code an excutable .sh file with the above code in it (i.e., in text edit), put the .sh file into the same directory as the fastq files, then ran the code `chmod +x nanoplot.sh`, then ran ` ./nanoplot.sh`
 
 
 
