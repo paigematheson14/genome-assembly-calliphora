@@ -107,12 +107,28 @@ samtools fastq SQK-MLK111-96-XL_barcode04.bam > sample4a.fastq
 Merge the poolA and poolB files together so that there is only one file to work with hereafter
 
 ```
-cat sample1.fastq  sample1a.fastq > sample1_cat.fastq
-cat sample2.fastq  sample2a.fastq > sample2_cat.fastq
-cat sample3.fastq  sample3a.fastq > sample3_cat.fastq
-cat sample4.fastq  sample4a.fastq > sample4_cat.fastq
+cat sample1.fastq  sample1a.fastq > MO_01_cat.fastq
+cat sample2.fastq  sample2a.fastq > MO_02_cat.fastq
+cat sample3.fastq  sample3a.fastq > MO_03_cat.fastq
+cat sample4.fastq  sample4a.fastq > MO_04_cat.fastq
 
 ```
+
+# 6. QC of fastQ files using Nanoplot and BBmap
+
+NanoPlot performs quality checks on the FASTQ files
+
+I turned the following nanoplot code into an excutable .sh file (i.e., in text edit, then ran the code `chmod +x nanoplot.sh`, put the file into the same directory as my fastq files, then ran ` ./nanoplot.sh`
+
+This is the code for the actual QC using nanoplot
+
+```
+for i in 01 02 03 04; do
+  NanoPlot --verbose -t 8 --fastq MO_${i}_cat.fastq -o 01_QC/MO_${i}
+done
+
+```
+
 
 
 
