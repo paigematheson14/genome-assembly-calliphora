@@ -177,9 +177,8 @@ module purge
 module load chopper
 
 #####CHOPPER#####
-for i in 01 02 03 04;
-do 
-chopper --threads $SLURM_CPUS_PER_TASK -q 8 -l 500 < ../MO_${i}_cat.fastq > MO_${i}_cat_fil.fastq ;
+for i in 01 02 03 04; do 
+chopper --threads $SLURM_CPUS_PER_TASK -q 8 -l 500 < ../MO_${i}_cat.fastq > MO_${i}_cat_fil.fastq 
 done
 ```
 
