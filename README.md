@@ -12,6 +12,8 @@ My promethion data arrived to me in BLOW5 format. There were two libraries (pool
 - NB03	GR-AC-CS-235 (i.e., calliphora stygia)
 - NB04	GR-AC-CV-196 (i.e., calliphora vicina)
 
+My Nanopore data came to me in a basecalled format (i.e., FASTQ). However, Nanopore currently uses Guppy to do basecalling which is not as effective as Dorado (Nanopore is going to switch to using Dorado eventually as it is actually better). Therefore, we decided that we would start with the raw BLOW5 files and do the basecalling step ourselves. 
+
 # 1. Convert BLOW5/SLOW5 files to POD5
 
 I used blue-crab (https://github.com/Psy-Fer/blue-crab) to make this conversion: 
@@ -86,6 +88,8 @@ dorado demux --output-dir nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecall
 
 Can probably run this directly through NESI without needing to create a slurm script. You need to download samtools - I downloaded from here (http://sourceforge.net/projects/samtools/files/samtools/) and followed these instructions (http://www.sthda.com/english/wiki/install-samtools-on-unix-system). Sometimes needed to re-run this line to get samtools to work (i.e. if nesi had timed out): ```export PATH=$PATH:/nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/samtools-1.20```
 
+We used SAMtools because it is the best for insect genomes. Other tools are highly optimised for humans etc. SAMtools is also the fastest. 
+
 ```
 cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/02_basecalling/01_demux_22258/DEMUX_22258/
 
@@ -119,15 +123,29 @@ cat sample4.fastq  sample4a.fastq > MO_04_cat.fastq
 NanoPlot performs quality checks on the FASTQ files.
 
 This is the code for the QC using nanoplot
-
 ```
+#!/bin/bash -e
+
+#SBATCH --account=uow03920
+#SBATCH --job-name=nanoplot
+#SBATCH --mem=40G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=124:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output basecallout_%j.out    # save the output into a file
+#SBATCH --error basecallerr_%j.err     # save the error output into a file
+
+module purge
+module load NanoPlot
+
+#####NANOPLOT#####
+
 for i in 01 02 03 04; do
   NanoPlot --verbose -t 8 --fastq MO_${i}_cat.fastq -o 01_QC/MO_${i}
 done
-
 ```
-
-I made code an excutable .sh file with the above code in it (i.e., in text edit), put the .sh file into the same directory as the fastq files, then ran the code `chmod +x nanoplot.sh`, then ran ` ./nanoplot.sh`
 
 BBmap checks the read length statistics (I didn't run this tool because NanoPlot produces these results too but providing the code here just in case I want to use it in the future)
 
@@ -137,7 +155,33 @@ readlength.sh in=${i}_cat_fil.fastq out=${i}_histogram.txt
 done
 ```
 
+# 7 Filtering reads using chopper
 
+My data had no high molecular weight scores (similar to Meeran's) so we decided to filter my reads based on QUALITY (minimum quality score of 8) and READ LENGTH (minimum length of 500 bases) using Chopper. We decided that --headcrop and --tailcrop were not necessary because Dorado does a good enough job of basecalling. The filtered reads are then saved to new FASTQ files (e.g., MO_${i}_cat_fil.fastq) for each sample.
+
+```
+#!/bin/bash -e
+
+#SBATCH --account=uow03920
+#SBATCH --job-name=chopper
+#SBATCH --mem=40G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=124:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output basecallout_%j.out    # save the output into a file
+#SBATCH --error basecallerr_%j.err     # save the error output into a file
+
+module purge
+module load chopper
+
+#####CHOPPER#####
+for i in 01 02 03 04;
+do 
+chopper --threads $SLURM_CPUS_PER_TASK -q 8 -l 500 < ../MO_${i}_cat.fastq > MO_${i}_cat_fil.fastq ;
+done
+```
 
 
 
