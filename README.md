@@ -129,6 +129,16 @@ done
 
 I made code an excutable .sh file with the above code in it (i.e., in text edit), put the .sh file into the same directory as the fastq files, then ran the code `chmod +x nanoplot.sh`, then ran ` ./nanoplot.sh`
 
+BBmap checks the read length statistics (I didn't run this tool because NanoPlot produces these results too but providing the code here just in case I want to use it in the future)
+
+```
+for i in 01 02 03 04; do 
+readlength.sh in=${i}_cat_fil.fastq out=${i}_histogram.txt
+done
+```
+
+
+
 
 
 
