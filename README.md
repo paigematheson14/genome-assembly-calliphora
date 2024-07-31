@@ -183,5 +183,13 @@ done
 ```
 
 
+# Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
+Follow this tutorial to create kmer a database of high-quality Illumina reads using meryl (https://github.com/marbl/merqury/wiki/1.-Prepare-meryl-dbs). I used a kmer value of 18 rather than the k-mer value I got from running the first line of code included in the tutorial (this was recommended by Meeran and a paper produced by someone from Peter's lab)
+
+``` ml Merqury ``` I include this line of code because I thought I needed to download meryl to do the analysis and spent way too long trying to configure it lol
+
+Do one-step counting on each sample. Each of my samples were in seperate folders, so need to make sure that the directory is the folder with each sample in it
+
+```meryl k=18k count PI_G_CH_272_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl```
 
 
