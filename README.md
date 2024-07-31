@@ -190,7 +190,9 @@ Follow this tutorial to create kmer a database of high-quality Illumina reads us
 
 Do one-step counting on each sample. Each of my samples were in seperate folders, so need to make sure that the directory is the folder with each sample in it
 
-```meryl k=18k count PI_G_CH_272_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
+```
+meryl k=18k count PI_G_CH_272_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
 meryl k=18k count PI_G_CQ_50_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
 meryl k=18k count PI_G_CS_239_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
-meryl k=18k count PI_G_CV_198_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl``` 
+meryl k=18k count PI_G_CV_198_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
+``` 
