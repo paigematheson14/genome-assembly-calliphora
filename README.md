@@ -183,6 +183,17 @@ done
 ```
 
 
+
+
+
+# Illuminaaaaaaaaa 
+
+# Concatenate the two lanes for each sample 
+
+
+
+
+
 # Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
 Follow this tutorial to create kmer a database of high-quality Illumina reads using meryl (https://github.com/marbl/merqury/wiki/1.-Prepare-meryl-dbs). I used a kmer value of 18 rather than the k-mer value I got from running the first line of code included in the tutorial (this was recommended by Meeran and a paper produced by someone from Peter's lab)
 
