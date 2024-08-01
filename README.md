@@ -190,8 +190,10 @@ done
 
 # Concatenate the two lanes for each sample 
 
-
-
+```
+cat PI_G_CH_1.fq.gz PI_G_CH_2.fq.gz > PI_G_CH.fq.gz
+cat PI_G_CQ_1.fq.gz PI_G_CQ_2.fq.gz > PI_G_CQ.fq.gz
+cat PI_G_CS_1.fq.gz PI_G_CS_2.fq.gz > PI_G_CS.fq.gz
 
 
 # Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
