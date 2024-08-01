@@ -186,7 +186,7 @@ done
 
 
 
-# Illuminaaaaaaaaa 
+# Illuminaaaaaaaaa sequenceeeeeees
 
 # Concatenate the two lanes for each sample 
 
@@ -194,6 +194,14 @@ done
 cat PI_G_CH_1.fq.gz PI_G_CH_2.fq.gz > PI_G_CH.fq.gz
 cat PI_G_CQ_1.fq.gz PI_G_CQ_2.fq.gz > PI_G_CQ.fq.gz
 cat PI_G_CS_1.fq.gz PI_G_CS_2.fq.gz > PI_G_CS.fq.gz
+cat PI_G_CV_1.fq.gz PI_G_CV_2.fq.gz > PI_G_CV.fq.gz
+```
+
+Move all of the concatenated files into a folder together. 
+
+# Check the quality of fastq files using fastqc and multiqc
+
+
 
 
 # Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
