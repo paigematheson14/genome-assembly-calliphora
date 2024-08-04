@@ -155,6 +155,21 @@ readlength.sh in=${i}_cat_fil.fastq out=${i}_histogram.txt
 done
 ```
 
+# 7 Removing duplicate reads 
+
+My FASTQ files had a number of duplicate reads in them so we needed to do an extra step to remove them. This was easy and I just ran it without using a slurm script. P.S at this stage my NeSI account wasn't working properly and I wasn't sure why. Turns out, it was because I had used all of the storage in my nobackup account. SO just make sure that you have space in your nobackup account to do the codes :) 
+
+```
+seqkit rmdup MO_01_cat.fastq -n -o MO_01_cat_clean.fastq -D Duplicates.txt -j 16
+seqkit rmdup MO_02_cat.fastq -n -o MO_02_cat_clean.fastq -D Duplicates2.txt -j 16
+seqkit rmdup MO_03_cat.fastq -n -o MO_03_cat_clean.fastq -D Duplicates3.txt -j 16
+seqkit rmdup MO_04_cat.fastq -n -o MO_04_cat_clean.fastq -D Duplicates4.txt -j 16
+```
+SAMPLE 1 removed 630,142 duplicates
+SAMPLE 2 removed 1,107,312 duplicates 
+SAMPLE 3 removed 442,128 duplicates 
+SAMPLE 4 removed 713,723 duplicates 
+
 # 7 Filtering reads using chopper
 
 My data had no high molecular weight scores (similar to Meeran's) so we decided to filter my reads based on QUALITY (minimum quality score of 8) and READ LENGTH (minimum length of 500 bases) using Chopper. We decided that --headcrop and --tailcrop were not necessary because Dorado does a good enough job of basecalling. The filtered reads are then saved to new FASTQ files (e.g., MO_${i}_cat_fil.fastq) for each sample.
