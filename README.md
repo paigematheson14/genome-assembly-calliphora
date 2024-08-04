@@ -165,12 +165,12 @@ seqkit rmdup MO_02_cat.fastq -n -o MO_02_cat_clean.fastq -D Duplicates2.txt -j 1
 seqkit rmdup MO_03_cat.fastq -n -o MO_03_cat_clean.fastq -D Duplicates3.txt -j 16
 seqkit rmdup MO_04_cat.fastq -n -o MO_04_cat_clean.fastq -D Duplicates4.txt -j 16
 ```
-SAMPLE 1 removed 630,142 duplicates
-SAMPLE 2 removed 1,107,312 duplicates 
-SAMPLE 3 removed 442,128 duplicates 
-SAMPLE 4 removed 713,723 duplicates 
+SAMPLE 1 removed 630,142 duplicates;
+SAMPLE 2 removed 1,107,312 duplicates;
+SAMPLE 3 removed 442,128 duplicates; 
+SAMPLE 4 removed 713,723 duplicates.
 
-# 7 Filtering reads using chopper
+# 7 Filtering reads using chopper using the 'clean' (i.e. removed duplicates) files
 
 My data had no high molecular weight scores (similar to Meeran's) so we decided to filter my reads based on QUALITY (minimum quality score of 8) and READ LENGTH (minimum length of 500 bases) using Chopper. We decided that --headcrop and --tailcrop were not necessary because Dorado does a good enough job of basecalling. The filtered reads are then saved to new FASTQ files (e.g., MO_${i}_cat_fil.fastq) for each sample.
 
@@ -192,10 +192,11 @@ module purge
 module load chopper
 
 #####CHOPPER#####
-for i in 01 02 03 04; do 
-chopper --threads $SLURM_CPUS_PER_TASK -q 8 -l 500 < ../MO_${i}_cat.fastq > MO_${i}_cat_fil.fastq 
+for i in 01 02 03 04; do
+chopper --threads 8 -q 8 -l 500 < /nesi/nobackup/uow03920/01_Blowfly_Assembly/03_FASTQ/MO_${i}_cat_clean.fastq > /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/MO_${i}_cat_clean_fil.fastq ;
 done
 ```
+
 
 
 
