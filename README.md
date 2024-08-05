@@ -155,7 +155,7 @@ readlength.sh in=${i}_cat_fil.fastq out=${i}_histogram.txt
 done
 ```
 
-# 7 Removing duplicate reads 
+# 7. Removing duplicate reads 
 
 My FASTQ files had a number of duplicate reads in them so we needed to do an extra step to remove them. This was easy and I just ran it without using a slurm script. P.S at this stage my NeSI account wasn't working properly and I wasn't sure why. Turns out, it was because I had used all of the storage in my nobackup account. SO just make sure that you have space in your nobackup account to do the codes :) 
 
@@ -170,7 +170,7 @@ SAMPLE 2 removed 1,107,312 duplicates;
 SAMPLE 3 removed 442,128 duplicates; 
 SAMPLE 4 removed 713,723 duplicates.
 
-# 7 Filtering reads using chopper using the 'clean' (i.e. removed duplicates) files
+# 8. Filtering reads using chopper using the 'clean' (i.e. removed duplicates) files
 
 My data had no high molecular weight scores (similar to Meeran's) so we decided to filter my reads based on QUALITY (minimum quality score of 8) and READ LENGTH (minimum length of 500 bases) using Chopper. We decided that --headcrop and --tailcrop were not necessary because Dorado does a good enough job of basecalling. The filtered reads are then saved to new FASTQ files (e.g., MO_${i}_cat_fil.fastq) for each sample.
 
@@ -196,6 +196,30 @@ for i in 01 02 03 04; do
 chopper --threads 8 -q 8 -l 500 < /nesi/nobackup/uow03920/01_Blowfly_Assembly/03_FASTQ/MO_${i}_cat_clean.fastq > /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/MO_${i}_cat_clean_fil.fastq ;
 done
 ```
+
+# 9. Repeat quality check again of the new filtered fastq files
+
+Using FASTQC, NanoPlot, BBmap, etc. to check if filtering improved the reads.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
