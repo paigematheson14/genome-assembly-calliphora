@@ -201,6 +201,73 @@ done
 
 Using FASTQC, NanoPlot, BBmap, etc. to check if filtering improved the reads.
 
+# 10. Assemble genomes using FLYE 
+
+I used FLYE to assemble my genomes with a threads score of 16 and an estimated genome size of 700 megabases. We also used a nextflow script to make this work (see below)
+
+NextFlow script (which was named fly_nxtflow.nf)
+
+```
+#!/usr/bin/env nextflow
+
+// Define the list of IDs
+params.ids = [ '01', '02', '03', '04']
+
+// Create a channel from the list of IDs
+Channel.from(params.ids)
+    .set { id_ch }
+
+// Define the process for running flye
+process runFlye {
+    cpus 24
+    memory '60 GB'
+    publishDir("/nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/02_FLYE", mode: 'move')
+    // Define the input
+    input:
+    val id from id_ch
+
+    // Define the output
+    output:
+    file("MO_${id}_flye") into flye_out_ch
+
+    // Define the command to be executed
+    script:
+    """
+    flye --nano-hq /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/MO_${id}_cat_clean_fil.fastq \
+         --out-dir MO_${id}_flye --threads ${task.cpus} -g 700m
+    """
+}
+
+// Define what to do with the output (optional)
+flye_out_ch.view()
+```
+
+Made it run in a slurm script using the following code:
+
+```
+#!/bin/bash -e
+#SBATCH --account=uow03920
+#SBATCH --job-name=nextflow_Flye
+#SBATCH --time=48:00:00
+#SBATCH --cpus-per-task=48
+#SBATCH --mem=180G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output nextflow_flye_%j.out    # save the output into a file
+#SBATCH --error nextflow_flye%j.err     # save the error output into a file
+
+# purge all other modules that may be loaded, and might interfare
+module purge
+
+## load tools
+module load Flye/2.9.3-gimkl-2022a-Python-3.11.3 
+ml Nextflow/22.10.7
+### FLYE
+
+nextflow run fly_nxtflow.nf
+```
+
+
 
 
 
