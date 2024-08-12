@@ -269,6 +269,8 @@ nextflow run fly_nxtflow.nf
 
 # 11. Check quality (i.e., N50, etc.) using QUAST
 
+Blurb from Meeran's github: "QUAST (Quality Assessment Tool for Genome Assemblies) is a software tool used for evaluating the quality of genome assemblies. It provides various metrics such as N50, number of contigs, genome size, and misassemblies that is used to assess and compare the accuracy and completeness of assembled genomes. QUAST also generates informative visualizations to facilitate the interpretation of assembly results."
+
 Don't need to run this using a slurm script as it only takes like 10 ish mins
 
 ```
