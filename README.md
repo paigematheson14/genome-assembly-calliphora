@@ -203,7 +203,7 @@ Using FASTQC, NanoPlot, BBmap, etc. to check if filtering improved the reads.
 
 # 10. Assemble genomes using FLYE 
 
-I used FLYE to assemble my genomes with a threads score of 16 and an estimated genome size of 700 megabases. We also used a nextflow script to make this work (see below)
+I used FLYE to assemble my genomes with a threads score of 16 and an estimated genome size of 700 megabases. We also used a nextflow script to make this work (see below). We used a nextflow script because it is faster than just running through slurm script. This is because nextflow runs each sample parallel (i.e. sample 1 and 2 are being run simultaneously rather than sample 1 being run to completion before sample 2 starts). This assembly using Next Flow took 1 day and 6ish hours. 
 
 NextFlow script (which was named fly_nxtflow.nf)
 
