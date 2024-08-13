@@ -294,9 +294,9 @@ quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assemb
 
 
 
-# Illuminaaaaaaaaa sequenceeeeeees
+# Short read Illumina sequences
 
-# Concatenate the two lanes for each sample 
+# 1. Concatenate the two lanes for each sample 
 
 ```
 cat PI_G_CH_1.fq.gz PI_G_CH_2.fq.gz > PI_G_CH.fq.gz
@@ -307,7 +307,15 @@ cat PI_G_CV_1.fq.gz PI_G_CV_2.fq.gz > PI_G_CV.fq.gz
 
 Move all of the concatenated files into a folder together. 
 
-# Check the quality of fastq files using fastqc and multiqc
+
+# 2. Check the quality of Illumina fastq files using fastqc (and multiqc if you want; see above)
+
+```
+fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/01_Illumina_QC /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/PI_G_CH.fq.gz
+fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/01_Illumina_QC /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/PI_G_CQ.fq.gz
+fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/01_Illumina_QC /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/PI_G_CS.fq.gz
+fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/01_Illumina_QC /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/PI_G_CV.fq.gz
+```
 
 
 
