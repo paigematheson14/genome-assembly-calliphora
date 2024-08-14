@@ -296,16 +296,9 @@ quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assemb
 
 # Short read Illumina sequences
 
-# 1. Concatenate the two lanes for each sample 
+You recieve two .fq.gz files per sample. This is because Illumina sequencing technology generates paired-end reads. In paired-end sequencing, DNA fragments are sequenced from both ends, producing two separate reads for each fragment. These reads are usually called "read 1" and "read 2". The first fastq file contains the sequences from the forward read and the second fastq file contains the sequences from the reverse read. 
 
-```
-cat PI_G_CH_1.fq.gz PI_G_CH_2.fq.gz > PI_G_CH.fq.gz
-cat PI_G_CQ_1.fq.gz PI_G_CQ_2.fq.gz > PI_G_CQ.fq.gz
-cat PI_G_CS_1.fq.gz PI_G_CS_2.fq.gz > PI_G_CS.fq.gz
-cat PI_G_CV_1.fq.gz PI_G_CV_2.fq.gz > PI_G_CV.fq.gz
-```
-
-Move all of the concatenated files into a folder together. 
+Having reads from both ends of a DNA fragment allows for more accurate alignment to a reference genome or better assembly of a de novo genome. It helps to resolve ambiguities in sequencing, such as repetitive regions, and provides better coverage of the fragment. 
 
 
 # 2. Check the quality of Illumina fastq files using fastqc (and multiqc if you want; see above)
