@@ -277,6 +277,32 @@ Don't need to run this using a slurm script as it only takes like 10 ish mins
 quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/01_QUAST_QC -l 'MO_01, MO_02, MO_03, MO_04'  /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_01.fasta /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_02.fasta /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_03.fasta /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_04.fasta
 ```
 
+# 12. Remove dem darn duplicate reads
+
+First align the fastq files to the fasta sequences
+
+```
+#!/bin/bash -e
+
+#SBATCH --account=uow03920
+#SBATCH --job-name=minimap
+#SBATCH --mem=40G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=48:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output minimapout_%j.out    # save the output into a file
+#SBATCH --error minimap_%j.err     # save the error output into a file
+
+module purge
+module load minimap2
+
+#####MINIMAP#####
+for i in 01 02 03 04; do
+minimap2 -c /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_${i}.fasta /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/MO_${i}_cat_clean_fil.fastq > MO_${i}_alignment.paf ;
+done
+
 
 
 
