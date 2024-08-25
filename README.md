@@ -312,31 +312,24 @@ First, load purge_dups module
 ml purge_dups
 ```
 
-Next, generate statistics for each .paf file 
+Next, generate statistics for each .paf file. This is quick as and does not need to be done through a slurm script
 
 ```
-#!/bin/bash -e
+pbcstat MO_01_alignment.paf
+pbcstat MO_02_alignment.paf
+pbcstat MO_03_alignment.paf
+pbcstat MO_04_alignment.paf
 
-#SBATCH --account=uow03920
-#SBATCH --job-name=purge_dups
-#SBATCH --mem=20G
-#SBATCH --cpus-per-task=8
-#SBATCH --ntasks-per-node=8
-#SBATCH --time=24:00:00
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=paige.matheson14@gmail.com
-#SBATCH --output purge_dups_%j.out    # save the output into a file
-#SBATCH --error purge_dups_%j.err     # save the error output into a file
-
-module purge
-module load purge_dups
-
-#####MINIMAP#####
-for i in 01 02 03 04; do
-pbcstat /nesi/nobackup/uow03920/01_Blowfly_assembly/06_Nanopore_assembly/02_Alignments/MO_${i}_alignment.paf ;
-done
 ```
 
+Next, calculate the cutoffs
+
+```
+calcuts MO_01.stat > cutoffs 2> calcuts_MO_01.log
+calcuts MO_02.stat > cutoffs 2> calcuts_MO_02.log
+calcuts MO_03.stat > cutoffs 2> calcuts_MO_03.log
+calcuts MO_04.stat > cutoffs 2> calcuts_MO_04.log
+```
 
 
 
