@@ -351,10 +351,10 @@ minimap2 -xasm5 -DP con_split_MO_04.fa con_split_MO_01.fa | gzip -c - > con_spli
 Next, purge duplicates 
 
 ```
-purge_dups -2 -T cutoffs -c MO_01.cov con_split.self_MO_01.paf.gz > dups_MO_01.bed 2> purge_dups_MO_01.log
-purge_dups -2 -T cutoffs -c MO_02.cov con_split.self_MO_02.paf.gz > dups_MO_02.bed 2> purge_dups_MO_02.log
-purge_dups -2 -T cutoffs -c MO_03.cov con_split.self_MO_03.paf.gz > dups_MO_03.bed 2> purge_dups_MO_03.log
-purge_dups -2 -T cutoffs -c MO_04.cov con_split.self_MO_04.paf.gz > dups_MO_04.bed 2> purge_dups_MO_04.log
+purge_dups -2 -T cutoffs -c MO_01.cov con_split_MO_01.self.paf.gz > dups_MO_01.bed 2> purge_dups_MO_01.log
+purge_dups -2 -T cutoffs -c MO_02.cov con_split_MO_02.self.paf.gz > dups_MO_02.bed 2> purge_dups_MO_02.log
+purge_dups -2 -T cutoffs -c MO_03.cov con_split_MO_03.self.paf.gz > dups_MO_03.bed 2> purge_dups_MO_03.log
+purge_dups -2 -T cutoffs -c MO_04.cov con_split_MO_04.self.paf.gz > dups_MO_04.bed 2> purge_dups_MO_04.log
 ```
 
 Finally, extract sequences: 
