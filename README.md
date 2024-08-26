@@ -376,27 +376,9 @@ Refer to these links for more information: purge_dups GitHub (https://github.com
 **Repeast QUAST again on the purged files to see if the sequences improve**
 
 ```
-#!/bin/bash -e
-
-#SBATCH --account=uow03920
-#SBATCH --job-name=quast
-#SBATCH --mem=40G
-#SBATCH --cpus-per-task=8
-#SBATCH --ntasks-per-node=8
-#SBATCH --time=48:00:00
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=paige.matheson14@gmail.com
-#SBATCH --output quast_%j.out    # save the output into a file
-#SBATCH --error quast_%j.err     # save the error output into a file
-
-module purge
-module load quast.py
-
-#####quast#####
-for i in 01 02 03 04; do
-quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/04_QUAST_purged -l 'MO_01_purged', 'MO_02_purged', 'MO_03_purged', 'MO_04_purged' /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_04.fa ;
-done
+python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/04_QUAST_purged -l 'purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04' /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_04.fa 
 ```
+
 
 
 
