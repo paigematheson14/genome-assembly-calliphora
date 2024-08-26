@@ -371,32 +371,33 @@ Two files are produced: purged.fa and hap.fa. The former is used for further ana
 Refer to these links for more information: purge_dups GitHub (https://github.com/dfguan/purge_dups) and the purge_dups manual (https://watermark.silverchair.com/bioinformatics_36_9_2896_s2.pdf?token=AQECAHi208BE49Ooan9kkhW_Ercy7Dm3ZL_9Cf3qfKAc485ysgAAA54wggOaBgkqhkiG9w0BBwagggOLMIIDhwIBADCCA4AGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQM2HI38pwL9wsAY2oNAgEQgIIDUW7tRyrt7wXS73WUgXsoQJvNAtZlLexU-OGKHVFItBNAGkCk2gtVSbT-VAM3RkVm9pct0k-2jg0vHAjOH9vtwokokVWiJN6vO0SdpFKDucLhKo4NntmVwmOE5ZSeDTN7wg4jkIBVoF9IbIy3-k0BV5w3JymfbMOlq8kgfDexw-KXTCg_4fsGc6nBKay-g6hG4bsClrE1bhlHnrzVeie2zfDpl-leOwYr5onz4CjP9T0iOEYx5u9FIoUc4FQcma7yL1L2kbuiaePlkTjN18PjKQoHb4Q_w_Gc2sZwXp-yplnSHlJYtxdxCTO9lm7hpjaVyOI2dDMnhHN2vTuUsCoqrpLSQwXYoWxmhhoA7Z_wninHQSA215t3YJRaqMQ52MPLVYKLghEAg4XuJt3dABoEqahX-iGeWwoCtfkVYrwGb7wJO-bwU2KASJ1_m3r_KVk2thEGhK0PEduDOAsy_uidnBO4LH-ECSo9hajsheA-TtGcEB-sBARsVvikb4eHzy_auBJ5TnkiVmvVn4IDFp6_pBmKMXwZJ8MBYcifBNGnKy-F5e9mSVTxQ04m68TUUBnv9n04eEZ5b079V_zkfBNEtm08AaYvKJOBY_312urIRph3QCd68CjYQ2j2shVmQEYZmCRT6GMGhoZoyprlWfFCobmqoAEY9YscOISndDRl9gZOeHe-ZKZ-uWZwMp7MeKZHd14K1aRZCpD5g0kxIfd9peiBeWPpDaB5LISR0KzwEqpZrb2YW-gbR4rVg4AqR3LaGhcl3soaxyhrQuC1RdDU_oaMtcnSQ1j8Ugx9bxCCAzGsHIRwBpfanPo7SPAEuH5EVhBPy6EgBotAyoX1_4aW2Bv-dk8Tkw7Igqryb74IuUd8h8egajkLc7IvqpsP12FxQKDhCoNQOtHnxCafAxcG4ua4l8Oe_VC67_exjHXHRDadTkZs_jr9lF7CZEBqcKl2V2eiKM_GT8-uoKeWtbMqOsCy1uprfH4Bf2Lz7hIs_HnhlHPsL71_zLscrv_b5MWvTD09Fn_69bAMfG9II-e1bo5JZ7FHJB8mxtlEpWlqvoo9xhWyS-aRUl5nBO0FcRear-BxDzoE5yam65KqW5Ns_sBTfUQBKk8Dh_7RmltB9zYUhg).
 
 
-**2. Load purge_dups and execute the following commands**
+# 13. QC using CompleASM and QUAST 
 
-First, load purge_dups module 
-
-```
-ml purge_dups
-```
-
-Next, generate statistics for each .paf file. This is quick as and does not need to be done through a slurm script
+**Repeast QUAST again on the purged files to see if the sequences improve**
 
 ```
-pbcstat MO_01_alignment.paf
-pbcstat MO_02_alignment.paf
-pbcstat MO_03_alignment.paf
-pbcstat MO_04_alignment.paf
+#!/bin/bash -e
 
+#SBATCH --account=uow03920
+#SBATCH --job-name=quast
+#SBATCH --mem=40G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=48:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output quast_%j.out    # save the output into a file
+#SBATCH --error quast_%j.err     # save the error output into a file
+
+module purge
+module load quast.py
+
+#####quast#####
+for i in 01 02 03 04; do
+quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/04_QUAST_purged -l 'MO_01_purged', 'MO_02_purged', 'MO_03_purged', 'MO_04_purged' /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged-MO_04.fa ;
+done
 ```
 
-Next, calculate the cutoffs
-
-```
-calcuts MO_01.stat > cutoffs 2> calcuts_MO_01.log
-calcuts MO_02.stat > cutoffs 2> calcuts_MO_02.log
-calcuts MO_03.stat > cutoffs 2> calcuts_MO_03.log
-calcuts MO_04.stat > cutoffs 2> calcuts_MO_04.log
-```
 
 
 
