@@ -331,6 +331,71 @@ calcuts MO_03.stat > cutoffs 2> calcuts_MO_03.log
 calcuts MO_04.stat > cutoffs 2> calcuts_MO_04.log
 ```
 
+Next, split the consensus fasta file
+
+```
+split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_01.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_01.fa
+split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_02.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_02.fa
+split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_03.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_03.fa
+split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_04.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_04.fa
+```
+Next, generate a self-mapping .paf file:
+
+```
+minimap2 -xasm5 -DP con_split_MO_01.fa con_split_MO_01.fa | gzip -c - > con_split_MO_01.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_02.fa con_split_MO_01.fa | gzip -c - > con_split_MO_02.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_03.fa con_split_MO_01.fa | gzip -c - > con_split_MO_03.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_04.fa con_split_MO_01.fa | gzip -c - > con_split_MO_04.self.paf.gz
+```
+
+Next, purge duplicates 
+
+```
+purge_dups -2 -T cutoffs -c MO_01.cov con_split.self_MO_01.paf.gz > dups_MO_01.bed 2> purge_dups_MO_01.log
+purge_dups -2 -T cutoffs -c MO_02.cov con_split.self_MO_02.paf.gz > dups_MO_02.bed 2> purge_dups_MO_02.log
+purge_dups -2 -T cutoffs -c MO_03.cov con_split.self_MO_03.paf.gz > dups_MO_03.bed 2> purge_dups_MO_03.log
+purge_dups -2 -T cutoffs -c MO_04.cov con_split.self_MO_04.paf.gz > dups_MO_04.bed 2> purge_dups_MO_04.log
+```
+
+Finally, extract sequences: 
+
+```
+get_seqs -e dups_MO_01.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_01.fasta
+get_seqs -e dups_MO_02.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_02.fasta
+get_seqs -e dups_MO_03.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_03.fasta
+get_seqs -e dups_MO_04.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_04.fasta
+```
+
+
+
+
+**2. Load purge_dups and execute the following commands**
+
+First, load purge_dups module 
+
+```
+ml purge_dups
+```
+
+Next, generate statistics for each .paf file. This is quick as and does not need to be done through a slurm script
+
+```
+pbcstat MO_01_alignment.paf
+pbcstat MO_02_alignment.paf
+pbcstat MO_03_alignment.paf
+pbcstat MO_04_alignment.paf
+
+```
+
+Next, calculate the cutoffs
+
+```
+calcuts MO_01.stat > cutoffs 2> calcuts_MO_01.log
+calcuts MO_02.stat > cutoffs 2> calcuts_MO_02.log
+calcuts MO_03.stat > cutoffs 2> calcuts_MO_03.log
+calcuts MO_04.stat > cutoffs 2> calcuts_MO_04.log
+```
+
 
 
 
