@@ -371,6 +371,11 @@ Two files are produced: purged.fa and hap.fa. The former is used for further ana
 Refer to these links for more information: purge_dups GitHub (https://github.com/dfguan/purge_dups) and the purge_dups manual 
 
 
+For some reason my sample 3 and maybe 4 were all weird (Sample 3 had a 'segmentation fault' and sample 4 had something else weird) so I checked the original FASTQ files using fastqc to see if there was an issue with the fastq files or whether the assembly went wrong some how. 
+
+
+
+
 # 13. QC using CompleASM and QUAST 
 
 **Repeast QUAST again on the purged files to see if the sequences improve**
