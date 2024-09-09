@@ -371,11 +371,6 @@ Two files are produced: purged.fa and hap.fa. The former is used for further ana
 Refer to these links for more information: purge_dups GitHub (https://github.com/dfguan/purge_dups) and the purge_dups manual 
 
 
-For some reason my sample 3 and maybe 4 were all weird (Sample 3 had a 'segmentation fault' and sample 4 had something else weird) so I checked the original FASTQ files using fastqc to see if there was an issue with the fastq files or whether the assembly went wrong some how. 
-
-
-
-
 # 13. QC using CompleASM and QUAST 
 
 **Repeast QUAST again on the purged files to see if the sequences improve**
@@ -384,6 +379,30 @@ For some reason my sample 3 and maybe 4 were all weird (Sample 3 had a 'segmenta
 python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/04_QUAST_purged -l 'purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04' /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_04.fa 
 ```
 
+
+For some reason my sample 3 and maybe 4 were all weird (Sample 3 had a 'segmentation fault' when I was doing the purge_dups part and sample 4 had something else weird) so I checked the original FASTQ files using fastqc to see if there was an issue with the fastq files or whether the assembly went wrong some how. This was also reflected in the quast report. sample 3 was suuuuuuper short compared to the others. 
+
+```
+#!/bin/bash -e
+#SBATCH --account=uow03920
+#SBATCH --job-name=fastqc_nanopore
+#SBATCH --time=48:00:00
+#SBATCH --cpus-per-task=8
+#SBATCH --mem=40G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output fastqc_nanopore_%j.out    # save the output into a file
+#SBATCH --error fastqc_nanopore_%j.err     # save the error output into a file
+
+module purge
+module load FastQC
+
+####FASTQC OF ILLUMINA READS#####
+
+for i in 01 02 03 04; do
+  fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/03_fastQC /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/MO_${i}_cat_clean_fil.fastq
+done
+```
 
 
 
