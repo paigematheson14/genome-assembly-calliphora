@@ -280,7 +280,7 @@ quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assemb
 # 12. Remove haplotigs and contig overlaps using purge_dups
 
 **1. First align the fastq files to the fasta sequences to generate .paf files.**
-Make a folder for each sample and do the code in those folders. I was doing it all in one big conglomerate folder and it kept overlapping and creating problems lol.
+Make a folder for each sample and do the code in those folders. I was doing it all in one big conglomerate folder and it kept overlapping and creating problems lol. I would recommend completing all of the steps for each sample one at a time rather than doing each step for each sample at the same time (i.e., do all the steps for sample one and then all the steps for sample 2). 
 
 ```
 #!/bin/bash -e
