@@ -280,6 +280,7 @@ quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assemb
 # 12. Remove haplotigs and contig overlaps using purge_dups
 
 **1. First align the fastq files to the fasta sequences to generate .paf files.**
+Make a folder for each sample and do the code in those folders. I was doing it all in one big conglomerate folder and it kept overlapping and creating problems lol.
 
 ```
 #!/bin/bash -e
@@ -334,10 +335,10 @@ calcuts MO_04.stat > cutoffs 2> calcuts_MO_04.log
 Next, split the consensus fasta file
 
 ```
-split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_01.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_01.fa
-split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_02.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_02.fa
-split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_03.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_03.fa
-split_fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_04.fasta > /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/con_split_MO_04.fa
+split_fa MO_01.fasta > con_split_MO_01.fa
+split_fa MO_02.fasta > con_split_MO_02.fa
+split_fa MO_03.fasta > con_split_MO_03.fa
+split_fa MO_04.fasta > con_split_MO_04.fa
 ```
 Next, generate a self-mapping .paf file:
 
@@ -360,10 +361,10 @@ purge_dups -2 -T cutoffs -c MO_04.cov con_split_MO_04.self.paf.gz > dups_MO_04.b
 Finally, extract sequences: 
 
 ```
-get_seqs -e dups_MO_01.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_01.fasta
-get_seqs -e dups_MO_02.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_02.fasta
-get_seqs -e dups_MO_03.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_03.fasta
-get_seqs -e dups_MO_04.bed /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/MO_04.fasta
+get_seqs -e dups_MO_01.bed MO_01.fasta
+get_seqs -e dups_MO_02.bed MO_02.fasta
+get_seqs -e dups_MO_03.bed MO_03.fasta
+get_seqs -e dups_MO_04.bed MO_04.fasta
 ```
 
 Two files are produced: purged.fa and hap.fa. The former is used for further analysis.
