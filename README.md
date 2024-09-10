@@ -377,7 +377,7 @@ Refer to these links for more information: purge_dups GitHub (https://github.com
 **Repeast QUAST again on the purged files to see if the sequences improve**
 
 ```
-python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/04_QUAST_purged -l 'purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04' /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/03_Purged.fa/purged_MO_04.fa 
+python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/01_QUAST -l purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04 /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample04.fa
 ```
 
 
