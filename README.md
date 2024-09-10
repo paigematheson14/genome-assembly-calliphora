@@ -344,9 +344,9 @@ Next, generate a self-mapping .paf file:
 
 ```
 minimap2 -xasm5 -DP con_split_MO_01.fa con_split_MO_01.fa | gzip -c - > con_split_MO_01.self.paf.gz
-minimap2 -xasm5 -DP con_split_MO_02.fa con_split_MO_01.fa | gzip -c - > con_split_MO_02.self.paf.gz
-minimap2 -xasm5 -DP con_split_MO_03.fa con_split_MO_01.fa | gzip -c - > con_split_MO_03.self.paf.gz
-minimap2 -xasm5 -DP con_split_MO_04.fa con_split_MO_01.fa | gzip -c - > con_split_MO_04.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_02.fa con_split_MO_02.fa | gzip -c - > con_split_MO_02.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_03.fa con_split_MO_03.fa | gzip -c - > con_split_MO_03.self.paf.gz
+minimap2 -xasm5 -DP con_split_MO_04.fa con_split_MO_04.fa | gzip -c - > con_split_MO_04.self.paf.gz
 ```
 
 Next, purge duplicates 
