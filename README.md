@@ -340,7 +340,7 @@ minimap2 -xasm5 -DP con_split_MO_01.fa con_split_MO_01.fa | gzip -c - > con_spli
 Next, purge duplicates 
 
 ```
-purge_dups -2 -T cutoffs -c MO_01.cov con_split_MO_01.self.paf.gz > dups_MO_01.bed 2> purge_dups_MO_01.log
+purge_dups -2 -T cutoffs -c PB.base.cov con_split_MO_01.self.paf.gz > dups_MO_01.bed 2> purge_dups_MO_01.log
 
 ```
 
