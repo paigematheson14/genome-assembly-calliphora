@@ -364,8 +364,71 @@ Refer to these links for more information: purge_dups GitHub (https://github.com
 python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/01_QUAST -l purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04 /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample04.fa
 ```
 
+# 14. Run BUSCO to see how sequences align with busco genes (we are looking for over 90%!) 
 
-For some reason my sample 3 and maybe 4 were all weird (Sample 3 had a 'segmentation fault' when I was doing the purge_dups part and sample 4 had something else weird) so I checked the original FASTQ files using fastqc to see if there was an issue with the fastq files or whether the assembly went wrong some how. This was also reflected in the quast report. sample 3 was suuuuuuper short compared to the others. 
+```
+#!/bin/bash -e
+
+#SBATCH --account=uow03920
+#SBATCH --job-name=busco_purged2
+#SBATCH --mem=60G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=120:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output busco2_%j.out    # save the output into a file
+#SBATCH --error busco2_%j.err     # save the error output into a file
+
+module purge
+module load BUSCO
+
+cd /scale_wlg_nobackup/filesets/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/
+
+#busco
+
+for i in 01 02 03 04; do
+busco  -i ${i}_purged.fasta -c 8 -o ${i}_purged.busco -m genome -l diptera_odb10 ;
+done
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ```
 #!/bin/bash -e
