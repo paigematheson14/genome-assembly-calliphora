@@ -393,77 +393,6 @@ done
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-```
-#!/bin/bash -e
-#SBATCH --account=uow03920
-#SBATCH --job-name=fastqc_nanopore
-#SBATCH --time=48:00:00
-#SBATCH --cpus-per-task=8
-#SBATCH --mem=40G
-#SBATCH --mail-type=ALL
-#SBATCH --mail-user=paige.matheson14@gmail.com
-#SBATCH --output fastqc_nanopore_%j.out    # save the output into a file
-#SBATCH --error fastqc_nanopore_%j.err     # save the error output into a file
-
-module purge
-module load FastQC
-
-####FASTQC OF ILLUMINA READS#####
-
-for i in 01 02 03 04; do
-  fastqc -t 8 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/03_fastQC /nesi/nobackup/uow03920/01_Blowfly_Assembly/04_Filtered_FASTQ/MO_${i}_cat_clean_fil.fastq
-done
-```
-
-
-
-
-
-
-
-
-
-
-
-
-
 # Short read Illumina sequences
 
 You recieve two .fq.gz files per sample. This is because Illumina sequencing technology generates paired-end reads. In paired-end sequencing, DNA fragments are sequenced from both ends, producing two separate reads for each fragment. These reads are usually called "read 1" and "read 2". The first fastq file contains the sequences from the forward read and the second fastq file contains the sequences from the reverse read. 
@@ -471,7 +400,7 @@ You recieve two .fq.gz files per sample. This is because Illumina sequencing tec
 Having reads from both ends of a DNA fragment allows for more accurate alignment to a reference genome or better assembly of a de novo genome. It helps to resolve ambiguities in sequencing, such as repetitive regions, and provides better coverage of the fragment. 
 
 
-# 2. Check the quality of Illumina fastq files using fastqc (and multiqc if you want; see above)
+# 1. Check the quality of Illumina fastq files using fastqc (and multiqc if you want; see above)
 
 ```
 #!/bin/bash -e
@@ -495,11 +424,40 @@ for i in 01 02 03 04; do
 done
 ```
 
+# 2. Filter Illumina short reads using TrimGalore
+With a Phred score of 20 or below
 
+```
+#!/bin/bash -e
+#SBATCH --account=uow03920
+#SBATCH --job-name=trim_galore
+#SBATCH --time=24:00:00
+#SBATCH --cpus-per-task=32
+#SBATCH --mem=40G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output trim_galore_%j.out    # save the output into a file
+#SBATCH --error trim_galore_%j.err     # save the error output into a file
 
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data
 
-# Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
+# purge all other modules that may be loaded, and might interfare
+module purge
+
+## load tools
+module load TrimGalore/0.6.7-gimkl-2020a-Python-3.8.2-Perl-5.30.1 
+
+### trim_galore
+for i in CH CQ CS CV ;
+do
+trim_galore -q 20 --length 100 --paired --fastqc --cores 32 ${i}_R1.fq.gz ${i}_R2.fq.gz -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/03_fil_data;
+done
+```
+
+# 3. Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
 Follow this tutorial to create kmer a database of high-quality Illumina reads using meryl (https://github.com/marbl/merqury/wiki/1.-Prepare-meryl-dbs). I used a kmer value of 18 rather than the k-mer value I got from running the first line of code included in the tutorial (this was recommended by Meeran and a paper produced by someone from Peter's lab)
+
+P.S. use terminal for this analysis because it wouldn't work when I tried to run through Jupyter for some reason
 
 ``` ml Merqury ``` I include this line of code because I thought I needed to download meryl to do the analysis and spent way too long trying to configure it lol
 
