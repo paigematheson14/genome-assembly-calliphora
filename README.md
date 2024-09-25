@@ -455,17 +455,35 @@ done
 ```
 
 # 3. Kmer analysis using Illumina reads & Genome quality completeness estimation using Merqury
-Follow this tutorial to create kmer a database of high-quality Illumina reads using meryl (https://github.com/marbl/merqury/wiki/1.-Prepare-meryl-dbs). I used a kmer value of 18 rather than the k-mer value I got from running the first line of code included in the tutorial (this was recommended by Meeran and a paper produced by someone from Peter's lab)
+Follow this tutorial (just step 1) to create kmer a database of high-quality Illumina reads using meryl (https://github.com/marbl/merqury/wiki/1.-Prepare-meryl-dbs). I used a kmer value of 18 rather than the k-mer value I got from running the first line of code included in the tutorial (this was recommended by Meeran and a paper produced by someone from Peter's lab)
 
 P.S. use terminal for this analysis because it wouldn't work when I tried to run through Jupyter for some reason
 
-``` ml Merqury ``` I include this line of code because I thought I needed to download meryl to do the analysis and spent way too long trying to configure it lol
-
-Do one-step counting on each sample. Each of my samples were in seperate folders, so need to make sure that the directory is the folder with each sample in it
+Do one-step counting on each sample.
 
 ```
-meryl k=18k count PI_G_CH_272_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
-meryl k=18k count PI_G_CQ_50_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
-meryl k=18k count PI_G_CS_239_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
-meryl k=18k count PI_G_CV_198_DKDL220008012-1A_HHL2KCCX2_L4_1.fq.gz output $genome.meryl
-``` 
+#!/bin/bash -e
+
+#SBATCH --account=uow03920
+#SBATCH --job-name=meryl
+#SBATCH --mem=30G
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=8
+#SBATCH --time=20:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output meryl_%j.out    # save the output into a file
+#SBATCH --error meryl_%j.err     # save the error output into a file
+
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/meryl
+
+module purge
+module load Merqury
+
+#meryl
+
+for i in CQ_R2 CQ_R1 CV_R2 CV_R1 CH_R2 CH_R1 CS_R2 CS_R1; do 
+meryl k=18k count ${i}.fq.gz output ${i}.genome.meryl ;
+done
+```
+
