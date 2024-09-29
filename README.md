@@ -481,9 +481,19 @@ module purge
 module load Merqury
 
 #meryl
+for i in CQ CS CV CH; do
 
-for i in CQ_R2 CQ_R1 CV_R2 CV_R1 CH_R2 CH_R1 CS_R2 CS_R1; do 
-meryl k=18k count ${i}.fq.gz output ${i}.genome.meryl ;
+meryl k=21 count ${i}*.fq.gz output /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads/00_QC/01_genomescope/${i}_k21.meryl;
+
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads/00_QC/01_genomescope
+
+## Create Histogram
+meryl histogram ${i}_k21.meryl > ${i}_k21.hist;
+
+## Replace with space separator
+tr '\t' ' ' <${i}_k21.hist > ${i}_k21_s.hist;
+
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads
 done
 ```
 
