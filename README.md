@@ -364,32 +364,32 @@ Refer to these links for more information: purge_dups GitHub (https://github.com
 python quast.py -t 16 -o /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/01_QUAST -l purged_MO_01, purged_MO_02, purged_MO_03, purged_MO_04 /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample01.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample02.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample03.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/purged_sample04.fa
 ```
 
-# 14. Run BUSCO to see how sequences align with busco genes (we are looking for over 90%!) 
+# 14. Run complasem to see how sequences align with busco genes (we are looking for over 90%!) 
 
 ```
 #!/bin/bash -e
-
 #SBATCH --account=uow03920
-#SBATCH --job-name=busco_purged2
-#SBATCH --mem=60G
+#SBATCH --job-name=compleasm
+#SBATCH --time=3:00:00
 #SBATCH --cpus-per-task=8
-#SBATCH --ntasks-per-node=8
-#SBATCH --time=120:00:00
+#SBATCH --mem=15G
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=paige.matheson14@gmail.com
-#SBATCH --output busco2_%j.out    # save the output into a file
-#SBATCH --error busco2_%j.err     # save the error output into a file
+#SBATCH --output compleasm_%j.out    # save the output into a file
+#SBATCH --error compleasm_%j.err     # save the error output into a file
 
+# purge all other modules that may be loaded, and might interfare
 module purge
-module load BUSCO
 
-cd /scale_wlg_nobackup/filesets/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/
+## load tools
+module load compleasm/0.2.5-gimkl-2022a
 
-#busco
-
-for i in 01 02 03 04; do
-busco  -i ${i}_purged.fasta -c 8 -o ${i}_purged.busco -m genome -l diptera_odb10 ;
+### Compleasm
+for i in 01 02 03 04;
+do
+compleasm.py run -a ${i}_purged.fa -o ${i}/00_QC/${i}_compleasm -l diptera_odb10 -t 8 ;
 done
+
 ```
 
 
@@ -496,4 +496,12 @@ tr '\t' ' ' <${i}_k21.hist > ${i}_k21_s.hist;
 cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads
 done
 ```
+# 4. Nextpolish Genome Polishing using Illumina Reads
+NextPolish is a tool used for polishing genomes using Illumina reads. In the script, NextPolish is applied to the purged genome fasta file obtained from a previous step. The process involves the following steps:
+
+## Process:
+**Alignment:** The purged genome fasta file is indexed and aligned to filtered Illumina paired-end reads using BWA-MEM.
+**Alignment Processing:** The aligned reads are processed using SAMtools to remove duplicate reads, sort the alignments, and mark duplicates.
+**Polishing Round 1:** NextPolish is used with specific parameters (-t 1) to polish the genome based on the alignments from the first round. This step generates a temporary polished genome file (genome.polishtemp.fa).
+**Polishing Round 2:** The temporary polished genome file from Round 1 is indexed and aligned again to the Illumina reads. NextPolish is then applied again (-t 2) to perform a second round of polishing, resulting in the final polished genome file (genome.nextpolish.fa).
 
