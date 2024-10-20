@@ -505,3 +505,70 @@ NextPolish is a tool used for polishing genomes using Illumina reads. In the scr
 **Polishing Round 1:** NextPolish is used with specific parameters (-t 1) to polish the genome based on the alignments from the first round. This step generates a temporary polished genome file (genome.polishtemp.fa).
 **Polishing Round 2:** The temporary polished genome file from Round 1 is indexed and aligned again to the Illumina reads. NextPolish is then applied again (-t 2) to perform a second round of polishing, resulting in the final polished genome file (genome.nextpolish.fa).
 
+## CODE: 
+
+```
+#!/bin/bash -e
+#SBATCH --account=uow03920
+#SBATCH --job-name=polish
+#SBATCH --time=18:00:00
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=2
+#SBATCH --mem=26G
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output polish_%j.out    # save the output into a file
+#SBATCH --error polish_%j.err     # save the error output into a file
+
+module purge
+module load SAMtools
+module load BWA
+
+for sam in CV;
+do
+    ##########
+    # PARAMS #
+    INDIR=/nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads/
+    read1=${INDIR}${sam}_R1_val_1.fq.gz
+    read2=${INDIR}${sam}_R2_val_2.fq.gz
+    OUTDIR=/nesi/nobackup/uow03920/01_Blowfly_Assembly/07_nextpolish/${sam}_polish
+    REFDIR=/nesi/nobackup/uow03920/01_Blowfly_Assembly/06_Nanopore_assembly/02_Alignments/purged_alignments/${sam}_purged/
+    REF=${REFDIR}${sam}_purged.fa
+    round=2
+    threads=20
+    NEXTPOLISH=/nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/NextPolish/lib/nextpolish1.py
+    #####################################################################
+    mkdir -p $OUTDIR
+    cd $OUTDIR
+    for ((i=1; i<=${round};i++)); do
+        # Step 1:
+        echo index the genome file and do alignment $i;
+        bwa index ${REF};
+        bwa mem -t ${threads} ${REF} ${read1} ${read2} | samtools view --threads 3 -F 0x4 -b - | samtools fixmate -m --threads 3 - - | samtools sort -m 2g --threads 5 - | samtools markdup --threads 5 -r - sgs.sort.bam;
+        echo index bam and genome files $i;
+        samtools index -@ ${threads} sgs.sort.bam;
+        samtools faidx ${REF};
+        echo polish genome file $i;
+        python ${NEXTPOLISH} -g ${REF} -t 1 -p ${threads} -s sgs.sort.bam > genome.polishtemp.fa;
+        REF=genome.polishtemp.fa;
+        echo round $i complete;
+        
+        # Step 2:
+        echo index genome file and do alignment $i;
+        bwa index ${REF};
+        bwa mem -t ${threads} ${REF} ${read1} ${read2} | samtools view --threads 3 -F 0x4 -b - | samtools fixmate -m --threads 3  - - | samtools sort -m 2g --threads 5 - | samtools markdup --threads 5 -r - sgs.sort.bam;
+        echo index bam and genome files $i;
+        samtools index -@ ${threads} sgs.sort.bam;
+        samtools faidx ${REF};
+        echo polish genome file $i;
+        python ${NEXTPOLISH} -g ${REF} -t 2 -p ${threads} -s sgs.sort.bam > genome.nextpolish.fa;
+        REF=genome.nextpolish.fa;
+        echo round $i complete;
+    done
+    echo genome polished for blowfly_${sam}
+done
+# Finally polished genome file: genome.nextpolish.fa
+```
+
+
+
