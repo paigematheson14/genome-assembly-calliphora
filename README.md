@@ -571,4 +571,7 @@ done
 ```
 
 
+# Check QC again using complasem and QUAST
+
+
 
