@@ -496,6 +496,48 @@ tr '\t' ' ' <${i}_k21.hist > ${i}_k21_s.hist;
 cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads
 done
 ```
+
+# Mapping the illumina sequences to the polished sequences
+We noticed that the estimated genome size for CV was quite a bit smaller than what we were expecting so we mapping the illumina fasta sequences to the polished sequences to see what is going on. 
+
+```
+#!/bin/bash -e
+
+#SBATCH --job-name qualimap
+#SBATCH --account=uow03920
+#SBATCH --cpus-per-task=25
+#SBATCH --mem=50G
+#SBATCH --time=10:00:00
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=paige.matheson14@gmail.com
+#SBATCH --output qualimap_%j.out    # save the output into a file
+#SBATCH --error qualimap_%j.err     # save the error output into a file
+
+ml SAMtools
+ml BWA
+ml Java/11.0.4
+ml ant
+
+#### QUALIMAP
+
+for i in CH CV CQ CS;
+do
+
+cd /nesi/nobackup/uow03920/01_Blowfly_Assembly/09_qualimap;
+bwa index ${i}_assembly_polished.fa;
+
+bwa mem -t 24 ${i}_assembly_polished.fa /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads/${i}_R1_val_1.fq.gz /nesi/nobackup/uow03920/01_Blowfly_Assembly/05_illumina_data/05_filtered_illumina_reads/${i}_R2_val_2.fq.gz | samtools view --threads 16 -F 0x4 -b - | samtools fixmate -m --threads 16 - - | samtools sort -m 2g --threads 16 - | samtools markdup --threads 16 -r - 00_QC/${i}_sort_sfld.bam;
+
+samtools index -@ 24 00_QC/${i}_sort_sfld.bam -o 00_QC/${i}_sort_sfld.bam.bai;
+
+/nesi/nobackup/uow03920/01_Blowfly_Assembly/09_qualimap/qualimap_v2.3/qualimap /nesi/nobackup/uow03920/01_Blowfly_Assembly/09_qualimap/BamQC/bin/bamqc -bam 00_QC/${i}_sort_sfld.bam -outdir /00_QC -nt 16 --java-mem-size=8G;
+
+cd ../;
+done
+```
+
+
+
 # 4. Nextpolish Genome Polishing using Illumina Reads
 NextPolish is a tool used for polishing genomes using Illumina reads. In the script, NextPolish is applied to the purged genome fasta file obtained from a previous step. The process involves the following steps:
 
